@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffe6f0, #fff);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      color: #ff4d88;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #ff7aa8;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .buttons {
+      margin-top: 25px;
+      position: relative;
+      height: 120px;
+    }
+
+    button {
+      border: none;
+      border-radius: 30px;
+      padding: 12px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+
+    #yesBtn {
+      background-color: #ff4d88;
+      color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+    }
+
+    #noBtn {
+      background-color: #ffd1e1;
+      color: #ff4d88;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+    }
+
+    .result {
+      display: none;
+    }
+
+    .result img {
+      width: 200px;
+      margin-bottom: 15px;
+    }
+
+    .result h2 {
+      color: #ff4d88;
+    }
+
+    .music-note {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #ff7aa8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container" id="mainContent">
+    <h1>Will you be my Valentine? 💕</h1>
+    <p id="message">Think carefully 😌</p>
+
+    <div class="buttons">
+      <button id="noBtn">No 🙄</button>
+      <button id="yesBtn">Yes 💖</button>
+    </div>
+
+    <div class="music-note">🔊 Tap anywhere to start music</div>
+  </div>
+
+  <div class="container result" id="resultContent">
+    <img src="https://i.imgur.com/6XGQZ6p.png" alt="Teddy Hug">
+    <h2>Good choice ❤️</h2>
+    <p>You’re stuck with me now 🥰</p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const message = document.getElementById("message");
+    const mainContent = document.getElementById("mainContent");
+    const resultContent = document.getElementById("resultContent");
+    const music = document.getElementById("bgMusic");
+
+    let noClicks = 0;
+
+    const messages = [
+      "Aww come on 🥺",
+      "Are you sure?? 😢",
+      "That hurts a little 💔",
+      "You're breaking my heart 😭",
+      "Okay now you’re just playing 😤"
+    ];
+
+    // Enable music on first tap (Android-friendly)
+    document.body.addEventListener("click", () => {
+      music.play().catch(() => {});
+    }, { once: true });
+
+    noBtn.addEventListener("click", () => {
+      noClicks++;
+      message.textContent = messages[Math.min(noClicks - 1, messages.length - 1)];
+
+      // Move No button randomly
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 80 - 40;
+      noBtn.style.transform = `translate(${x}px, ${y}px) scale(${1 - noClicks * 0.15})`;
+
+      if (noClicks >= 5) {
+        noBtn.style.display = "none";
+        yesBtn.style.transform = "translateX(-50%) scale(1.6)";
+        message.textContent = "There is only one option now 😏💖";
+      }
+    });
+
+    yesBtn.addEventListener("click", () => {
+      mainContent.style.display = "none";
+      resultContent.style.display = "block";
+    });
+  </script>
+
+</body>
+    </html>
