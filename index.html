@@ -6,6 +6,10 @@
   <title>Be My Valentine ❤️</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       height: 100vh;
@@ -17,15 +21,48 @@
       overflow: hidden;
     }
 
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      color: #ff4d88;
+      font-size: 18px;
+      animation: floatUp linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
     .container {
       background: white;
       padding: 30px 20px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+      border-radius: 22px;
+      box-shadow: 0 15px 40px rgba(255, 77, 136, 0.3);
       width: 90%;
       max-width: 360px;
       text-align: center;
-      position: relative;
+      animation: popIn 0.8s ease;
+      z-index: 10;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     h1 {
@@ -36,7 +73,7 @@
     p {
       color: #ff7aa8;
       font-size: 14px;
-      min-height: 20px;
+      min-height: 22px;
     }
 
     .buttons {
@@ -48,7 +85,7 @@
     button {
       border: none;
       border-radius: 30px;
-      padding: 12px 25px;
+      padding: 12px 26px;
       font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -61,6 +98,11 @@
       left: 50%;
       transform: translateX(-50%);
       bottom: 0;
+      box-shadow: 0 5px 15px rgba(255,77,136,0.4);
+    }
+
+    #yesBtn:hover {
+      transform: translateX(-50%) scale(1.1);
     }
 
     #noBtn {
@@ -73,31 +115,28 @@
 
     .result {
       display: none;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .result img {
       width: 200px;
       margin-bottom: 15px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
 
     .result h2 {
       color: #ff4d88;
     }
-
-    .music-note {
-      font-size: 12px;
-      margin-top: 10px;
-      color: #ff7aa8;
-    }
   </style>
 </head>
 
 <body>
-
-  <!-- Background music -->
-  <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-  </audio>
 
   <div class="container" id="mainContent">
     <h1>Will you be my Valentine? 💕</h1>
@@ -107,12 +146,10 @@
       <button id="noBtn">No 🙄</button>
       <button id="yesBtn">Yes 💖</button>
     </div>
-
-    <div class="music-note">🔊 Tap anywhere to start music</div>
   </div>
 
   <div class="container result" id="resultContent">
-    <img src="https://i.imgur.com/6XGQZ6p.png" alt="Teddy Hug">
+    <img src="teddy.jpg" alt="Teddy Hug">
     <h2>Good choice ❤️</h2>
     <p>You’re stuck with me now 🥰</p>
   </div>
@@ -123,7 +160,6 @@
     const message = document.getElementById("message");
     const mainContent = document.getElementById("mainContent");
     const resultContent = document.getElementById("resultContent");
-    const music = document.getElementById("bgMusic");
 
     let noClicks = 0;
 
@@ -132,27 +168,21 @@
       "Are you sure?? 😢",
       "That hurts a little 💔",
       "You're breaking my heart 😭",
-      "Okay now you’re just playing 😤"
+      "Okay now you’re just teasing 😤"
     ];
-
-    // Enable music on first tap (Android-friendly)
-    document.body.addEventListener("click", () => {
-      music.play().catch(() => {});
-    }, { once: true });
 
     noBtn.addEventListener("click", () => {
       noClicks++;
       message.textContent = messages[Math.min(noClicks - 1, messages.length - 1)];
 
-      // Move No button randomly
       const x = Math.random() * 200 - 100;
       const y = Math.random() * 80 - 40;
       noBtn.style.transform = `translate(${x}px, ${y}px) scale(${1 - noClicks * 0.15})`;
 
       if (noClicks >= 5) {
         noBtn.style.display = "none";
-        yesBtn.style.transform = "translateX(-50%) scale(1.6)";
-        message.textContent = "There is only one option now 😏💖";
+        yesBtn.style.transform = "translateX(-50%) scale(1.5)";
+        message.textContent = "There is only one answer now 😏💖";
       }
     });
 
@@ -160,7 +190,21 @@
       mainContent.style.display = "none";
       resultContent.style.display = "block";
     });
+
+    // Floating hearts generator
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
+    }, 300);
   </script>
 
 </body>
-    </html>
+</html>
